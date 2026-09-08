@@ -1,1 +1,203 @@
+2026-09-08 09:00:01 INFO  [server] Initializing backend service
+2026-09-08 09:00:02 INFO  [server] Loading application configuration
+2026-09-08 09:00:03 INFO  [server] Environment: production
+2026-09-08 09:00:04 INFO  [server] HTTP server listening on port 8080
+2026-09-08 09:00:05 INFO  [database] Initializing PostgreSQL connection pool
+2026-09-08 09:00:06 INFO  [database] PostgreSQL connection pool established with 10 connections
+2026-09-08 09:00:08 INFO  [cache] Connecting to Redis cache
+2026-09-08 09:00:09 INFO  [cache] Redis connection established
+2026-09-08 09:00:12 INFO  [auth] Authentication service initialized
+2026-09-08 09:00:14 INFO  [server] Backend service startup completed successfully
 
+2026-09-08 09:02:11 INFO  [http] GET /api/users 200 118ms
+2026-09-08 09:02:14 INFO  [http] GET /api/users/1001 200 74ms
+2026-09-08 09:02:18 INFO  [http] GET /api/products 200 156ms
+2026-09-08 09:02:23 INFO  [http] GET /api/products/501 200 91ms
+2026-09-08 09:02:27 INFO  [http] POST /api/orders 201 244ms
+2026-09-08 09:02:29 INFO  [orders] Order ORD-78421 created successfully
+2026-09-08 09:02:31 INFO  [http] GET /api/orders/ORD-78421 200 83ms
+2026-09-08 09:02:35 INFO  [http] GET /api/profile 200 67ms
+
+2026-09-08 09:04:02 WARN  [http] GET /api/products/9999 returned 404 42ms
+2026-09-08 09:04:05 WARN  [products] Product ID 9999 does not exist
+2026-09-08 09:04:12 INFO  [http] GET /api/products/502 200 88ms
+2026-09-08 09:04:19 WARN  [auth] Failed login attempt for user_id=1042
+2026-09-08 09:04:20 WARN  [auth] Invalid credentials supplied
+2026-09-08 09:04:24 INFO  [auth] User user_id=1042 authenticated successfully
+
+2026-09-08 09:06:01 INFO  [database] Executing query: SELECT users WHERE id=1042
+2026-09-08 09:06:02 INFO  [database] Query completed successfully in 84ms
+2026-09-08 09:06:08 INFO  [http] GET /api/users/1042 200 96ms
+2026-09-08 09:06:15 INFO  [orders] Processing payment for order ORD-78422
+2026-09-08 09:06:17 INFO  [payment] Payment authorization successful
+2026-09-08 09:06:18 INFO  [orders] Order ORD-78422 marked as PAID
+
+2026-09-08 09:08:01 ERROR [database] Database query failed
+2026-09-08 09:08:01 ERROR [database] ErrorCode=DB-1001 Message="Connection unexpectedly closed"
+2026-09-08 09:08:02 WARN  [database] Retrying database operation attempt=1
+2026-09-08 09:08:03 INFO  [database] Database connection restored
+2026-09-08 09:08:04 INFO  [database] Query completed successfully after retry
+
+2026-09-08 09:10:11 INFO  [http] POST /api/orders 201 321ms
+2026-09-08 09:10:12 INFO  [orders] Order ORD-78423 created successfully
+2026-09-08 09:10:15 ERROR [payment] Payment processing failed
+2026-09-08 09:10:15 ERROR [payment] ErrorCode=PAY-402 Message="Payment provider rejected transaction"
+2026-09-08 09:10:16 WARN  [payment] Retrying payment request attempt=1
+2026-09-08 09:10:17 WARN  [payment] Retrying payment request attempt=2
+2026-09-08 09:10:19 ERROR [payment] Payment failed after 2 retries
+2026-09-08 09:10:20 ERROR [orders] Order ORD-78423 moved to PAYMENT_FAILED state
+
+2026-09-08 09:12:03 INFO  [cache] GET cache:key=user:1042
+2026-09-08 09:12:03 INFO  [cache] Cache hit for user:1042
+2026-09-08 09:12:07 INFO  [http] GET /api/profile 200 22ms
+2026-09-08 09:12:14 WARN  [cache] Redis response latency exceeded threshold: 850ms
+2026-09-08 09:12:18 INFO  [cache] Redis response latency returned to normal
+
+2026-09-08 09:14:01 INFO  [http] POST /api/orders 201 287ms
+2026-09-08 09:14:02 INFO  [orders] Order ORD-78424 created successfully
+2026-09-08 09:14:04 ERROR [database] ErrorCode=DB-1002 Message="Query execution timeout"
+2026-09-08 09:14:04 ERROR [database] Query exceeded timeout limit of 2000ms
+2026-09-08 09:14:05 WARN  [database] Cancelling long-running query
+2026-09-08 09:14:06 INFO  [database] Query cancelled successfully
+2026-09-08 09:14:08 ERROR [orders] Failed to retrieve order payment information
+
+2026-09-08 09:16:21 INFO  [auth] JWT token validation requested
+2026-09-08 09:16:21 ERROR [auth] ErrorCode=AUTH-401 Message="JWT token expired"
+2026-09-08 09:16:22 WARN  [http] GET /api/profile returned 401 18ms
+2026-09-08 09:16:27 INFO  [auth] User requested token refresh
+2026-09-08 09:16:28 INFO  [auth] Refresh token accepted
+2026-09-08 09:16:29 INFO  [auth] New access token generated successfully
+
+2026-09-08 09:18:03 INFO  [http] POST /api/users 201 412ms
+2026-09-08 09:18:04 INFO  [users] User account user_id=1050 created
+2026-09-08 09:18:07 ERROR [validation] ErrorCode=VAL-400 Message="Required field 'email' missing"
+2026-09-08 09:18:07 WARN  [http] POST /api/users returned 400 31ms
+2026-09-08 09:18:08 INFO  [validation] Invalid request rejected before database insertion
+
+2026-09-08 09:20:11 INFO  [queue] Publishing order event ORD-78425
+2026-09-08 09:20:12 INFO  [queue] Event published successfully
+2026-09-08 09:20:18 INFO  [worker] Worker received order event ORD-78425
+2026-09-08 09:20:21 INFO  [worker] Order processing completed successfully
+
+2026-09-08 09:22:01 ERROR [cache] ErrorCode=REDIS-503 Message="Connection refused"
+2026-09-08 09:22:01 ERROR [cache] Unable to connect to Redis at redis.internal:6379
+2026-09-08 09:22:02 WARN  [cache] Falling back to database cache strategy
+2026-09-08 09:22:04 INFO  [cache] Fallback cache strategy enabled
+2026-09-08 09:22:09 INFO  [http] GET /api/products 200 612ms
+
+2026-09-08 09:24:33 INFO  [http] GET /api/reports/daily 200 481ms
+2026-09-08 09:24:34 WARN  [reports] Report generation time exceeded expected threshold
+2026-09-08 09:24:36 INFO  [reports] Daily report generated successfully
+
+2026-09-08 09:26:10 ERROR [http] GET /api/orders/ORD-00000 returned 500 213ms
+2026-09-08 09:26:10 ERROR [orders] ErrorCode=ORD-500 Message="Unexpected error while retrieving order"
+2026-09-08 09:26:11 ERROR [orders] Exception=NullReferenceException
+2026-09-08 09:26:11 ERROR [orders] StackTrace=OrderService.getOrderById -> OrderController.getOrder -> HttpHandler
+2026-09-08 09:26:12 INFO  [monitoring] Error event recorded successfully
+
+2026-09-08 09:28:01 INFO  [scheduler] Starting scheduled cleanup job
+2026-09-08 09:28:02 INFO  [scheduler] Found 148 expired sessions
+2026-09-08 09:28:05 INFO  [scheduler] Removed 148 expired sessions
+2026-09-08 09:28:06 INFO  [scheduler] Cleanup job completed successfully
+
+2026-09-08 09:30:12 ERROR [database] ErrorCode=DB-1003 Message="Deadlock detected"
+2026-09-08 09:30:12 ERROR [database] Transaction aborted due to deadlock
+2026-09-08 09:30:13 WARN  [database] Retrying transaction attempt=1
+2026-09-08 09:30:15 INFO  [database] Transaction committed successfully after retry
+
+2026-09-08 09:32:04 INFO  [upload] Receiving file upload filename=product-catalog.csv size=18MB
+2026-09-08 09:32:05 INFO  [upload] File upload completed successfully
+2026-09-08 09:32:06 INFO  [upload] Validating uploaded CSV
+2026-09-08 09:32:08 ERROR [upload] ErrorCode=FILE-422 Message="Invalid CSV format"
+2026-09-08 09:32:08 ERROR [upload] Row 184 contains 7 columns; expected 6
+2026-09-08 09:32:09 WARN  [upload] File rejected due to validation failure
+
+2026-09-08 09:34:11 INFO  [http] GET /api/analytics 200 932ms
+2026-09-08 09:34:12 WARN  [analytics] Slow query detected duration=4812ms
+2026-09-08 09:34:13 INFO  [analytics] Analytics response returned successfully
+
+2026-09-08 09:36:02 ERROR [external] ErrorCode=EXT-504 Message="Upstream service timeout"
+2026-09-08 09:36:02 ERROR [external] Service=inventory-service Timeout=5000ms
+2026-09-08 09:36:03 WARN  [external] Retrying upstream request attempt=1
+2026-09-08 09:36:07 INFO  [external] Upstream service responded successfully
+2026-09-08 09:36:08 INFO  [inventory] Inventory synchronized successfully
+
+2026-09-08 09:38:14 INFO  [http] POST /api/products 201 198ms
+2026-09-08 09:38:15 INFO  [products] Product PROD-9021 created successfully
+2026-09-08 09:38:19 ERROR [database] ErrorCode=DB-1004 Message="Unique constraint violation"
+2026-09-08 09:38:19 ERROR [database] Duplicate SKU detected: SKU-77821
+2026-09-08 09:38:20 WARN  [products] Product creation rolled back
+
+2026-09-08 09:40:01 INFO  [security] Rate limit monitoring enabled
+2026-09-08 09:40:15 WARN  [security] Rate limit approaching for IP=10.20.4.18
+2026-09-08 09:40:17 ERROR [security] ErrorCode=RATE-429 Message="Too many requests"
+2026-09-08 09:40:17 WARN  [http] GET /api/search returned 429 12ms
+2026-09-08 09:40:20 INFO  [security] Request accepted after rate limit window reset
+
+2026-09-08 09:42:05 INFO  [worker] Starting background email notification job
+2026-09-08 09:42:06 INFO  [worker] Processing 24 pending notifications
+2026-09-08 09:42:09 ERROR [worker] ErrorCode=MAIL-550 Message="SMTP server rejected recipient"
+2026-09-08 09:42:09 ERROR [worker] Recipient=user@example.invalid
+2026-09-08 09:42:10 WARN  [worker] Notification marked for retry
+2026-09-08 09:42:12 INFO  [worker] 23 notifications processed successfully
+
+2026-09-08 09:44:18 ERROR [memory] ErrorCode=MEM-507 Message="Heap usage exceeded warning threshold"
+2026-09-08 09:44:18 WARN  [memory] Heap usage=87%
+2026-09-08 09:44:20 INFO  [memory] Garbage collection initiated
+2026-09-08 09:44:23 INFO  [memory] Heap usage reduced to 64%
+
+2026-09-08 09:46:01 INFO  [http] GET /api/search?q=laptop 200 321ms
+2026-09-08 09:46:04 INFO  [http] GET /api/search?q=phone 200 284ms
+2026-09-08 09:46:09 ERROR [search] ErrorCode=SEARCH-500 Message="Search index unavailable"
+2026-09-08 09:46:09 ERROR [search] Index=products_v3 State=UNAVAILABLE
+2026-09-08 09:46:10 WARN  [search] Falling back to database search
+2026-09-08 09:46:14 INFO  [search] Database fallback returned 42 results
+
+2026-09-08 09:48:03 INFO  [orders] Starting order reconciliation job
+2026-09-08 09:48:07 ERROR [orders] ErrorCode=RECON-409 Message="Order state mismatch"
+2026-09-08 09:48:07 ERROR [orders] Order=ORD-78419 Expected=PAID Actual=PENDING
+2026-09-08 09:48:08 WARN  [orders] Manual reconciliation required
+2026-09-08 09:48:10 INFO  [orders] Reconciliation job completed with warnings
+
+2026-09-08 09:50:11 ERROR [config] ErrorCode=CFG-500 Message="Required configuration value missing"
+2026-09-08 09:50:11 ERROR [config] Missing environment variable PAYMENT_PROVIDER_URL
+2026-09-08 09:50:12 ERROR [payment] Payment provider initialization failed
+2026-09-08 09:50:13 WARN  [server] Payment functionality temporarily disabled
+2026-09-08 09:50:16 INFO  [server] Core backend services remain operational
+
+2026-09-08 09:52:02 INFO  [database] Connection pool health check started
+2026-09-08 09:52:03 WARN  [database] Available connections=1 Active connections=9
+2026-09-08 09:52:04 ERROR [database] ErrorCode=DB-POOL-503 Message="Connection pool exhausted"
+2026-09-08 09:52:05 WARN  [database] Requests waiting for available database connection
+2026-09-08 09:52:08 INFO  [database] Connection released
+2026-09-08 09:52:09 INFO  [database] Waiting request acquired connection
+
+2026-09-08 09:54:22 INFO  [http] POST /api/auth/logout 204 31ms
+2026-09-08 09:54:25 INFO  [auth] Session invalidated successfully
+2026-09-08 09:54:29 INFO  [http] GET /api/health 200 9ms
+
+2026-09-08 09:56:01 ERROR [worker] ErrorCode=WORKER-500 Message="Unhandled exception in background worker"
+2026-09-08 09:56:01 ERROR [worker] Exception=IndexOutOfBoundsException
+2026-09-08 09:56:01 ERROR [worker] Job=invoice-generation-job Batch=20260908-04
+2026-09-08 09:56:02 ERROR [worker] Worker terminated unexpectedly
+2026-09-08 09:56:04 INFO  [supervisor] Worker restart initiated
+2026-09-08 09:56:08 INFO  [supervisor] Worker restarted successfully
+
+2026-09-08 09:58:14 INFO  [invoice] Starting invoice generation for order ORD-78430
+2026-09-08 09:58:15 INFO  [invoice] Invoice template loaded
+2026-09-08 09:58:17 ERROR [invoice] ErrorCode=INV-500 Message="Failed to render invoice template"
+2026-09-08 09:58:17 ERROR [invoice] Exception=TemplateRenderException
+2026-09-08 09:58:18 ERROR [invoice] Missing template variable: customer_address
+2026-09-08 09:58:19 WARN  [invoice] Invoice generation aborted for ORD-78430
+
+2026-09-08 10:00:01 INFO  [server] Health check passed
+2026-09-08 10:00:03 INFO  [database] Health check passed
+2026-09-08 10:00:05 INFO  [cache] Health check passed
+2026-09-08 10:00:07 INFO  [queue] Health check passed
+2026-09-08 10:00:09 INFO  [server] All critical dependencies healthy
+2026-09-08 10:00:11 INFO  [monitoring] Daily health check completed
+2026-09-08 10:00:15 INFO  [server] Service operating normally
+2026-09-08 10:00:20 INFO  [metrics] Requests=1842 Errors=37 ErrorRate=2.01%
+2026-09-08 10:00:21 WARN  [metrics] Error rate exceeds normal baseline of 1.50%
+2026-09-08 10:00:25 INFO  [monitoring] Daily monitoring cycle completed
+2026-09-08 10:00:30 INFO  [server] Backend service remains available
